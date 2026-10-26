@@ -60,11 +60,13 @@
   #env .e-card { z-index: 2; left: 5%; right: 5%; top: 6%; bottom: auto; width: 90%; height: 92%; background: #fbf4e6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--burgundy); box-shadow: 0 2px 8px rgba(0,0,0,.35); transition: transform 1.1s cubic-bezier(.4,0,.2,1) .7s; }
   #env .e-card::before { content: ""; position: absolute; inset: 5px; border: 1px solid #D4AF37; }
   #env .e-card::after { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(212,175,55,.45); }
-  .e-card .mono { display: block; font-style: italic; font-size: 34px; line-height: 1; letter-spacing: .04em; }
-  /* monogram colors: B = burgundy, & = gold, A = navy */
-  .e-card .mono .m-b { color: var(--burgundy); } .e-card .mono .m-and { color: #C49A2C; } .e-card .mono .m-a { color: var(--blue); }
-  .e-card small { display: block; font-family: var(--font-label); letter-spacing: .24em; text-transform: uppercase; font-size: 8.5px; color: #B8902F; font-weight: 600; margin-top: 10px; }
-  .e-card .dt { display: block; font-family: var(--font-label); letter-spacing: .3em; font-size: 8.5px; color: var(--blue); margin-top: 6px; font-weight: 600; }
+  /* monogram image: ornate B + A with a swash (static/imgs/monogram.svg) */
+  .e-card .mono { display: block; width: 40%; max-width: 112px; height: auto; margin: 0 auto; }
+  /* names: GOLD, same serif font as the reference design (the & is gold too) */
+  .e-card .nm { display: block; font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .05em; color: #B8902F; margin-top: 8px; }
+  .e-card .nm .amp { color: #C49A2C; padding: 0 .12em; }
+  /* date: BLUE */
+  .e-card .dt { display: block; font-family: var(--font-display); letter-spacing: .18em; font-size: 10px; color: var(--blue); margin-top: 4px; font-weight: 600; }
   #env .e-front { z-index: 3; filter: drop-shadow(0 -2px 3px rgba(0,0,0,.3)); }   /* soft shadow so the letter looks tucked inside the pocket */
   #env .e-flap { z-index: 4; height: 50%;   /* 50% = the flap tip lands exactly in the middle of the envelope */ transform-origin: top center; transition: transform .8s ease, z-index 0s linear .4s; }
   .e-flap span { position: absolute; inset: 0; display: block; clip-path: polygon(0 0, 100% 0, 50% 100%); }
@@ -260,7 +262,7 @@
       <div class="env-shadow"></div>
       <button id="env" aria-label="Tap the envelope to open the invitation">
         <span class="e-back"></span>
-        <span class="e-card"><span class="mono"><span class="m-b">B</span> <span class="m-and">&amp;</span> <span class="m-a">A</span></span><small>Brian &amp; Amylou</small><span class="dt">12 . 15 . 2026</span></span>
+        <span class="e-card"><img class="mono" src="static/imgs/monogram-exact.png" alt="B and A monogram" width="1230" height="854"><span class="nm">Brian <span class="amp">&amp;</span> Amylou</span><span class="dt">12.15.2026</span></span>
         <svg class="e-front" viewBox="0 0 300 180" aria-hidden="true">
           <!-- The front is a "pocket": left, right and bottom triangles all meet at the exact center (150, 90).
                The top V is left open on purpose, so the letter can be seen rising out from INSIDE. -->
