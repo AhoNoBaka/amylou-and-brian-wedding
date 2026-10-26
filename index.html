@@ -61,7 +61,9 @@
   #env .e-card::before { content: ""; position: absolute; inset: 5px; border: 1px solid #D4AF37; }
   #env .e-card::after { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(212,175,55,.45); }
   .e-card .mono { display: block; font-style: italic; font-size: 34px; line-height: 1; letter-spacing: .04em; }
-  .e-card small { display: block; font-family: var(--font-label); letter-spacing: .24em; text-transform: uppercase; font-size: 8.5px; color: var(--burgundy); font-weight: 600; margin-top: 10px; }
+  /* monogram colors: B = burgundy, & = gold, A = navy */
+  .e-card .mono .m-b { color: var(--burgundy); } .e-card .mono .m-and { color: #C49A2C; } .e-card .mono .m-a { color: var(--blue); }
+  .e-card small { display: block; font-family: var(--font-label); letter-spacing: .24em; text-transform: uppercase; font-size: 8.5px; color: #B8902F; font-weight: 600; margin-top: 10px; }
   .e-card .dt { display: block; font-family: var(--font-label); letter-spacing: .3em; font-size: 8.5px; color: var(--blue); margin-top: 6px; font-weight: 600; }
   #env .e-front { z-index: 3; filter: drop-shadow(0 -2px 3px rgba(0,0,0,.3)); }   /* soft shadow so the letter looks tucked inside the pocket */
   #env .e-flap { z-index: 4; height: 50%;   /* 50% = the flap tip lands exactly in the middle of the envelope */ transform-origin: top center; transition: transform .8s ease, z-index 0s linear .4s; }
@@ -155,6 +157,23 @@
   .qr-box { display: block; width: 96px; height: 96px; background: #fff; border: 1px solid rgba(212,175,55,.8); padding: 5px; }
   .qr-box svg, .qr-box img { display: block; width: 100%; height: 100%; }
   .badge-box { display: block; width: 96px; height: 96px; }
+  .qr-open { padding: 0; border: 0; background: none; cursor: pointer; border-radius: 50%; transition: transform .25s ease; }
+  .qr-open:hover, .qr-open:focus-visible { transform: scale(1.06); }
+
+  /* ===== GIFT POP-UP (choose GCash or UnionBank) ===== */
+  .modal { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; padding: 18px; background: rgba(20,4,8,.78); }
+  .modal.show { display: flex; }
+  .modal-card { position: relative; width: min(360px, 100%); max-height: calc(100vh - 36px); max-height: calc(100dvh - 36px); overflow-y: auto; background: var(--paper); color: var(--burgundy); border: 1px solid rgba(212,175,55,.8); padding: 30px 20px 22px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+  .modal-x { position: absolute; top: 4px; right: 6px; width: 42px; height: 42px; border: 0; background: none; color: var(--burgundy); font-size: 28px; line-height: 1; }
+  .modal h3 { margin: 0 0 14px; font-weight: 400; font-style: italic; font-size: 26px; }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--burgundy); margin-bottom: 16px; }
+  .tabs button { border: 0; background: none; padding: 12px 0; font-family: var(--font-label); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--burgundy); }
+  .tabs button[aria-selected="true"] { background: var(--burgundy); color: var(--paper); }
+  .pane { display: none; }
+  .pane.on { display: block; }
+  .pane img { display: block; width: 100%; max-width: 270px; margin: 0 auto; border: 1px solid rgba(212,175,55,.7); background: #fff; }
+  .pane p { margin: 14px 0 0; font-size: 15px; font-style: italic; line-height: 1.5; color: #4a1420; }
+  .pane .btn { margin-top: 14px; }
   .badge-box svg { display: block; width: 100%; height: 100%; }
   .qr small { display: block; margin-top: 8px; font-family: var(--font-label); font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--burgundy); }
 
@@ -241,7 +260,7 @@
       <div class="env-shadow"></div>
       <button id="env" aria-label="Tap the envelope to open the invitation">
         <span class="e-back"></span>
-        <span class="e-card"><span class="mono">B &amp; A</span><small>Brian &amp; Amylou</small><span class="dt">12 . 15 . 2026</span></span>
+        <span class="e-card"><span class="mono"><span class="m-b">B</span> <span class="m-and">&amp;</span> <span class="m-a">A</span></span><small>Brian &amp; Amylou</small><span class="dt">12 . 15 . 2026</span></span>
         <svg class="e-front" viewBox="0 0 300 180" aria-hidden="true">
           <!-- The front is a "pocket": left, right and bottom triangles all meet at the exact center (150, 90).
                The top V is left open on purpose, so the letter can be seen rising out from INSIDE. -->
@@ -285,13 +304,10 @@
     <p class="lead rv">request the pleasure of your company at the celebration of our wedding</p>
     <p class="date-big rv" style="margin-top:24px">December 15, 2026</p>
 
-    <!-- PHOTO PLACEHOLDER: replace this whole <svg> with <img src="photo.jpg" alt="Brian and Amylou"> -->
+    <!-- MAIN PHOTO: the arch crops it to a tall shape. object-position (53% 50%) decides which part stays in view;
+         the first number moves it left/right. -->
     <div class="arch rv"><div>
-      <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Photo placeholder">
-        <rect width="300" height="400" fill="#e4dcc9"/><circle cx="215" cy="120" r="34" fill="#D4AF37"/>
-        <path d="M0 270 Q80 190 160 250 T300 230 V400 H0Z" fill="#6B7D6B"/><path d="M0 330 Q110 260 200 320 T300 300 V400 H0Z" fill="#6B1D2A"/><path d="M0 370 Q120 320 300 360 V400 H0Z" fill="#0D2C6B"/>
-        <text x="150" y="388" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#F2E9D8">Your photo here</text>
-      </svg>
+      <img src="static/imgs/photo-1.jpg" alt="Brian and Amylou" style="object-position: 53% 50%">
     </div></div>
   </div>
 </header>
@@ -455,9 +471,20 @@
           <p>Your presence is the greatest gift. Should you wish to give more, a monetary gift is warmly appreciated.</p>
         </div>
         <div class="qr">
-          <!-- QR PLACEHOLDER: replace this whole <svg> with <img src="gift-qr.png" alt="QR code for gifts"> (put gift-qr.png next to index.html) -->
-          <span class="qr-box"><svg viewBox="0 0 100 100" role="img" aria-label="QR code placeholder"><rect x="3" y="3" width="94" height="94" fill="none" stroke="#b8902f" stroke-width="1.5" stroke-dasharray="5 4"/><text x="50" y="48" text-anchor="middle" font-family="Josefin Sans, Arial, sans-serif" font-weight="600" font-size="12" letter-spacing="1.5" fill="#6B1D2A">YOUR QR</text><text x="50" y="64" text-anchor="middle" font-family="Josefin Sans, Arial, sans-serif" font-weight="600" font-size="12" letter-spacing="1.5" fill="#6B1D2A">HERE</text></svg></span>
-          <small>Scan to gift</small>
+          <!-- Tapping this button opens the pop-up (id="gift-modal") where guests choose GCash or UnionBank -->
+          <button type="button" class="badge-box qr-open" id="gift-open" aria-haspopup="dialog" aria-label="Open gift QR codes">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" fill="none" stroke="#b8902f" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#b8902f" stroke-opacity=".6" stroke-width=".8"/>
+              <path d="M50 9l3.5 3.5L50 16l-3.5-3.5zM50 84l3.5 3.5L50 91l-3.5-3.5z" fill="#b8902f"/>
+              <g fill="none" stroke="#6B1D2A" stroke-width="2.4">
+                <rect x="28" y="28" width="17" height="17"/><rect x="55" y="28" width="17" height="17"/><rect x="28" y="55" width="17" height="17"/>
+              </g>
+              <g fill="#6B1D2A"><rect x="33" y="33" width="7" height="7"/><rect x="60" y="33" width="7" height="7"/><rect x="33" y="60" width="7" height="7"/>
+                <rect x="55" y="55" width="7" height="7"/><rect x="65" y="65" width="7" height="7"/><rect x="65" y="55" width="7" height="4"/><rect x="55" y="66" width="4" height="6"/></g>
+            </svg>
+          </button>
+          <small>Tap to gift</small>
         </div>
       </div>
       <!-- Same layout as the Gift Guide (text left, 96px picture right) so the two cards line up and balance -->
@@ -526,8 +553,47 @@
   </div>
 </section>
 
+<!-- ===== GIFT POP-UP =====
+     To change an account: replace the picture in static/imgs/ (same file name), or edit the src="" below. -->
+<div class="modal" id="gift-modal" role="dialog" aria-modal="true" aria-labelledby="gift-title">
+  <div class="modal-card">
+    <button type="button" class="modal-x" id="gift-close" aria-label="Close">&times;</button>
+    <h3 id="gift-title">Send a gift</h3>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tab-gcash" aria-selected="true" data-pane="pane-gcash">GCash</button>
+      <button type="button" role="tab" id="tab-union" aria-selected="false" data-pane="pane-union">UnionBank</button>
+    </div>
+    <div class="pane on" id="pane-gcash" role="tabpanel" aria-labelledby="tab-gcash">
+      <img src="static/imgs/qr-gcash-crop.jpg" alt="GCash QR code" loading="lazy">
+      <p>Scan with your banking app, or save it and upload it from your gallery.</p>
+      <a class="btn" href="static/imgs/qr-gcash-crop.jpg" download="Gift-GCash-QR.jpg">Save QR</a>
+    </div>
+    <div class="pane" id="pane-union" role="tabpanel" aria-labelledby="tab-union">
+      <img src="static/imgs/qr-union-bank-crop.jpg" alt="UnionBank QR code" loading="lazy">
+      <p>Scan with your banking app, or save it and upload it from your gallery.</p>
+      <a class="btn" href="static/imgs/qr-union-bank-crop.jpg" download="Gift-UnionBank-QR.jpg">Save QR</a>
+    </div>
+  </div>
+</div>
+
 <script>
   var intro = document.getElementById('intro');
+
+  // ===== GIFT POP-UP =====
+  // Tap the gold QR button -> pop-up opens. Tabs switch between GCash and UnionBank.
+  // Closes with the X, a tap outside the card, or the Esc key.
+  var gm = document.getElementById('gift-modal'), gOpen = document.getElementById('gift-open');
+  function setPane(id) {
+    document.querySelectorAll('.tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.pane === id ? 'true' : 'false'); });
+    document.querySelectorAll('.pane').forEach(function (p) { p.classList.toggle('on', p.id === id); });
+  }
+  function openGift() { gm.classList.add('show'); document.body.style.overflow = 'hidden'; document.getElementById('gift-close').focus(); }
+  function closeGift() { gm.classList.remove('show'); document.body.style.overflow = ''; gOpen.focus(); }
+  gOpen.addEventListener('click', openGift);
+  document.getElementById('gift-close').addEventListener('click', closeGift);
+  gm.addEventListener('click', function (e) { if (e.target === gm) closeGift(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && gm.classList.contains('show')) closeGift(); });
+  document.querySelectorAll('.tabs button').forEach(function (b) { b.addEventListener('click', function () { setPane(b.dataset.pane); }); });
 
   // Always start at the very top
   if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
