@@ -52,7 +52,7 @@
   #intro .eyebrow { color: #e9d9b5; } #intro .hl { color: #e9d27e; }
   .intro-names { font-style: italic; color: #e9d9b5; font-size: 16px; letter-spacing: .04em; margin-top: 10px; }
 
-  .env-wrap { position: relative; width: min(300px, 80vw); aspect-ratio: 5 / 3; perspective: 900px; margin-top: 18px; }
+  .env-wrap { position: relative; width: min(300px, 80vw); aspect-ratio: 5 / 3; perspective: 900px; margin-top: calc(min(300px, 80vw) * .22 + 18px); }   /* extra room above so the opened flap + letter don't cover the title */
   .env-shadow { position: absolute; left: 6%; right: 6%; bottom: -14px; height: 22px; border-radius: 50%; background: rgba(46,9,17,.4); filter: blur(10px); }
   #env { position: absolute; inset: 0; display: block; padding: 0; border: 0; background: none; }
   #env > span, #env svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
@@ -63,16 +63,16 @@
   .e-card .mono { display: block; font-style: italic; font-size: 34px; line-height: 1; letter-spacing: .04em; }
   .e-card small { display: block; font-family: var(--font-label); letter-spacing: .24em; text-transform: uppercase; font-size: 8.5px; color: var(--burgundy); font-weight: 600; margin-top: 10px; }
   .e-card .dt { display: block; font-family: var(--font-label); letter-spacing: .3em; font-size: 8.5px; color: var(--blue); margin-top: 6px; font-weight: 600; }
-  #env .e-front { z-index: 3; }
-  #env .e-flap { z-index: 4; height: 63.4%; transform-origin: top center; transition: transform .8s ease, z-index 0s linear .4s; }
+  #env .e-front { z-index: 3; filter: drop-shadow(0 -2px 3px rgba(0,0,0,.3)); }   /* soft shadow so the letter looks tucked inside the pocket */
+  #env .e-flap { z-index: 4; height: 50%;   /* 50% = the flap tip lands exactly in the middle of the envelope */ transform-origin: top center; transition: transform .8s ease, z-index 0s linear .4s; }
   .e-flap span { position: absolute; inset: 0; display: block; clip-path: polygon(0 0, 100% 0, 50% 100%); }
   .f-out { background: linear-gradient(#1b4496, #0f2f73); transition: opacity 0s linear .4s; }
   .f-in { background: linear-gradient(#e6d9bd, #f6ecd8); opacity: 0; transition: opacity 0s linear .4s; }
-  #env .e-seal { z-index: 5; position: absolute; inset: auto; left: 50%; top: 63.4%; width: 22%; height: auto; aspect-ratio: 1; transform: translate(-50%, -50%); transition: opacity .35s ease, transform .5s ease; }
-  .open .e-flap { transform: scaleY(-1); z-index: 1; }
+  #env .e-seal { z-index: 5; position: absolute; inset: auto; left: 50%; top: 50%; width: 22%; height: auto; aspect-ratio: 1; transform: translate(-50%, -50%); transition: opacity .35s ease, transform .5s ease; }
+  .open #env .e-flap { transform: scaleY(-1); z-index: 1; }   /* "#env" is needed here, otherwise the earlier "#env .e-flap" rule wins and the flap stays in front of the letter */
   .open .f-out { opacity: 0; } .open .f-in { opacity: 1; }
   .open .e-seal { opacity: 0; transform: translate(-50%, -50%) scale(1.4); }
-  .open .e-card { transform: translateY(-62%); }
+  .open .e-card { transform: translateY(-55%); }
 
   .scratch-label { font-family: var(--font-label); font-size: 11px; letter-spacing: .28em; text-transform: uppercase; font-weight: 600; margin-top: 26px; color: var(--champagne); }
   .scratch { position: relative; width: min(300px, 80vw); height: 66px; background: #fbf4e6; border: 1px solid rgba(212,175,55,.8); box-shadow: 0 5px 14px rgba(60,12,20,.25); }
@@ -105,15 +105,50 @@
   .card p { margin: 10px 0 0; font-size: 23px; line-height: 1.35; }
   .btn { display: inline-block; margin-top: 18px; padding: 11px 24px; font-family: var(--font-label); font-weight: 600; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; text-decoration: none; color: var(--burgundy); border: 1px solid var(--burgundy); transition: background .3s, color .3s; }
   .btn:hover { background: var(--burgundy); color: var(--paper); }
+  .map { margin-top: 20px; border: 1px solid rgba(212,175,55,.7); line-height: 0; }
+  .map iframe { width: 100%; height: 190px; border: 0; display: block; }
 
   /* ===== 6. TIMELINE ===== */
   .program { text-align: center; padding: 30px 0 70px; }
-  .tl { text-align: left; max-width: 420px; margin: 0 auto; border-left: 1px solid var(--gold); }
-  .tl .item { position: relative; padding: 0 0 30px 28px; }
+  /* each row = an icon on the left + the time and name on the right (the old line and diamond are gone) */
+  .tl { text-align: left; max-width: 340px; margin: 0 auto; }
+  .tl .item { display: flex; align-items: center; gap: 20px; padding: 0 0 26px; }
   .tl .item:last-child { padding-bottom: 0; }
-  .tl .item::before { content: ""; position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; transform: rotate(45deg); background: var(--burgundy); box-shadow: 0 0 0 3px var(--paper); }
+  .tl .ico { flex: none; width: 46px; height: 46px; fill: none; stroke: #e9d27e; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
   .tl .time { font-family: var(--font-label); font-weight: 600; letter-spacing: .18em; font-size: 13px; color: var(--blue); }
   .tl .what { font-size: 23px; font-style: italic; }
+
+  /* ===== 6B. ENTOURAGE ===== */
+  .entourage { text-align: center; padding: 70px 0; }
+  .ent-group { margin-top: 44px; }
+  .ent-title { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .28em; font-size: 12px; font-weight: 600; color: #e9d27e; margin: 0 0 14px; }
+  .ent-group p { margin: 0 0 4px; font-size: 17px; line-height: 1.4; }
+  .ent-grid { display: grid; gap: 6px 18px; margin-top: 26px; }
+  .ent-grid:first-of-type { margin-top: 0; }
+  .ent-grid.two, .ent-grid.pairs { grid-template-columns: 1fr 1fr; }
+  .ent-grid.pairs { margin-top: 0; }
+  .ent-grid p:empty { display: none; }
+  .role { font-family: var(--font-label); font-weight: 600; text-transform: uppercase; letter-spacing: .2em; font-size: 10.5px; color: #e3cf8f; margin: 0 0 6px; }
+  .ent-grid > div { padding-bottom: 8px; }
+  .ent-grid.four { grid-template-columns: repeat(4, 1fr); gap: 6px 8px; }   /* 4 in one row: Coin / Bible / Ring / Flower Girl */
+  .ent-grid.four p { font-size: 13px; line-height: 1.35; }
+  .ent-grid.four .role { font-size: 8px; letter-spacing: .1em; }
+  @media (min-width: 600px) { .ent-grid.three { grid-template-columns: repeat(3, 1fr); } .ent-grid.four p { font-size: 16px; } .ent-grid.four .role { font-size: 10px; letter-spacing: .2em; } }
+  @media (max-width: 420px) { .ent-group p { font-size: 15.5px; } .ent-grid { gap: 6px 12px; } .ent-grid.four { gap: 6px 6px; } }   /* slightly smaller names on phones so fewer wrap */
+  @media (max-width: 340px) { .ent-grid.pairs { grid-template-columns: 1fr; } }   /* tiny phones: 1 column, same order, so pairs stay together */
+
+  /* ===== 6C. ATTIRE GUIDE + REMINDERS ===== */
+  .attire { text-align: center; padding: 70px 0; }
+  .attire .card p { font-size: 20px; margin: 6px 0 0; }
+  .attire .card .who { font-family: var(--font-label); font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--blue); margin-top: 12px; display: block; }
+  .swatches { display: flex; justify-content: center; gap: 18px; margin-top: 18px; flex-wrap: wrap; }
+  .swatches span { display: flex; flex-direction: column; align-items: center; gap: 7px; font-family: var(--font-label); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; color: var(--burgundy); }
+  .swatches i { display: block; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(212,175,55,.9); box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+  .notes-title { margin-top: 46px; }
+  .notes { display: grid; gap: 16px; margin-top: 18px; }
+  @media (min-width: 600px) { .notes { grid-template-columns: 1fr 1fr; } }
+  .attire .notes .card { margin: 0; padding: 22px 20px; }
+  .attire .notes .card p { font-size: 16px; font-style: italic; line-height: 1.6; color: #4a1420; }
 
   /* ===== 7. GALLERY ===== */
   .gallery { text-align: center; padding: 20px 0 60px; }
@@ -157,7 +192,6 @@
   .dark .unit span { color: var(--champagne); } .dark .unit small { color: #e3cf8f; }
   .dark .card { color: var(--burgundy); box-shadow: inset 0 1px 0 #fff, 0 8px 22px rgba(0,0,0,.3); }
   .dark .card .eyebrow { color: var(--blue); }
-  .dark .tl .item::before { background: #D4AF37; box-shadow: none; }
   .spr.dk use:first-child { fill: #000; fill-opacity: .25; stroke: #000; stroke-opacity: .4; }
   .spr.dk use:last-child { fill: #D4AF37; fill-opacity: .14; stroke: #D4AF37; stroke-opacity: .6; }
 
@@ -192,7 +226,7 @@
 
     <div>
       <div class="eyebrow">You are invited</div>
-      <div class="intro-title">Two hearts, one <i class="hl">beautiful</i> day</div>
+      <div class="intro-title">We Invite You<br>As We Say <i class="hl">I Do</i></div>
       <div class="intro-names">Brian Julian &amp; Amylou Gimeno</div>
     </div>
 
@@ -202,18 +236,23 @@
         <span class="e-back"></span>
         <span class="e-card"><span class="mono">B &amp; A</span><small>Brian &amp; Amylou</small><span class="dt">12 . 15 . 2026</span></span>
         <svg class="e-front" viewBox="0 0 300 180" aria-hidden="true">
-          <rect width="300" height="180" fill="url(#body)"/>
-          <path d="M0 0L0 180L150 92Z" fill="#11317a"/><path d="M300 0L300 180L150 92Z" fill="#0d2a66"/>
-          <path d="M0 180L300 180L150 78Z" fill="#163b88"/>
-          <path d="M0 180L150 78L300 180" fill="none" stroke="#D4AF37" stroke-opacity=".35" stroke-width=".8"/>
-          <rect width="300" height="180" filter="url(#grain)" opacity=".35"/>
+          <!-- The front is a "pocket": left, right and bottom triangles all meet at the exact center (150, 90).
+               The top V is left open on purpose, so the letter can be seen rising out from INSIDE. -->
+          <clipPath id="pocket"><path d="M0 0L0 180L300 180L300 0L150 90Z"/></clipPath>
+          <path d="M0 0L0 180L150 90Z" fill="#11317a"/><path d="M300 0L300 180L150 90Z" fill="#0d2a66"/>
+          <path d="M0 180L300 180L150 90Z" fill="#163b88"/>
+          <path d="M0 180L150 90L300 180" fill="none" stroke="#D4AF37" stroke-opacity=".35" stroke-width=".8"/>
+          <rect width="300" height="180" filter="url(#grain)" opacity=".35" clip-path="url(#pocket)"/>
         </svg>
         <span class="e-flap"><span class="f-out"></span><span class="f-in"></span></span>
         <svg class="e-seal" viewBox="0 0 70 70" aria-hidden="true">
-          <path d="M35 2C47 1 56 6 62 14C70 20 67 33 63 40C64 51 54 59 43 60C36 65 26 61 20 57C8 57 2 45 5 36C1 26 8 15 17 12C21 4 28 3 35 2Z" fill="url(#wax)"/>
-          <circle cx="35" cy="32" r="21" fill="none" stroke="#6b4e10" stroke-opacity=".5" stroke-width="1.2"/>
-          <text x="36" y="40" text-anchor="middle" font-family="Playfair Display,serif" font-style="italic" font-size="21" fill="#fff3c0" fill-opacity=".8">B&amp;A</text>
-          <text x="35" y="39" text-anchor="middle" font-family="Playfair Display,serif" font-style="italic" font-size="21" fill="#6b4e10">B&amp;A</text>
+          <!-- translate(0 2.5) nudges the wax drawing down so it is centered inside its own box -->
+          <g transform="translate(0 2.5)">
+            <path d="M35 2C47 1 56 6 62 14C70 20 67 33 63 40C64 51 54 59 43 60C36 65 26 61 20 57C8 57 2 45 5 36C1 26 8 15 17 12C21 4 28 3 35 2Z" fill="url(#wax)"/>
+            <circle cx="35" cy="32" r="21" fill="none" stroke="#6b4e10" stroke-opacity=".5" stroke-width="1.2"/>
+            <text x="36" y="40" text-anchor="middle" font-family="Playfair Display,serif" font-style="italic" font-size="21" fill="#fff3c0" fill-opacity=".8">B&amp;A</text>
+            <text x="35" y="39" text-anchor="middle" font-family="Playfair Display,serif" font-style="italic" font-size="21" fill="#6b4e10">B&amp;A</text>
+          </g>
         </svg>
       </button>
     </div>
@@ -269,9 +308,12 @@
     <h2 class="rv">The <i>celebration</i></h2>
     <div class="card rv"><div class="eyebrow">Date</div><p>December 15, 2026</p></div>
     <div class="card rv"><div class="eyebrow">Church</div><p>Minor Basilica and Parish of La Purisima Concepcion &ndash; Santa Maria</p>
-      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Minor+Basilica+and+Parish+of+La+Purisima+Concepcion+Santa+Maria+Bulacan" target="_blank" rel="noopener">Go to Church</a></div>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Minor+Basilica+and+Parish+of+La+Purisima+Concepcion+Santa+Maria+Bulacan" target="_blank" rel="noopener">Go to Church</a>
+      <!-- Mini map: Google's free embed. Change the text after q= to move the pin. -->
+      <div class="map"><iframe title="Map to the church" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Minor+Basilica+and+Parish+of+La+Purisima+Concepcion+Santa+Maria+Bulacan&z=16&output=embed"></iframe></div></div>
     <div class="card rv"><div class="eyebrow">Venue</div><p>Angel Gabriel's Garden</p>
-      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Angel+Gabriel%27s+Garden" target="_blank" rel="noopener">Go to Venue</a></div>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Angel+Gabriel%27s+Garden" target="_blank" rel="noopener">Go to Venue</a>
+      <div class="map"><iframe title="Map to the venue" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Angel+Gabriel%27s+Garden&z=16&output=embed"></iframe></div></div>
   </div>
 </section>
 
@@ -280,10 +322,130 @@
     <p class="eyebrow rv">The day</p>
     <h2 class="rv">Wedding <i>timeline</i></h2>
     <div class="tl rv">
-      <div class="item"><div class="time">2:00 PM</div><div class="what">Wedding Ceremony</div></div>
-      <div class="item"><div class="time">4:00 PM</div><div class="what">Cocktail Hours</div></div>
-      <div class="item"><div class="time">5:30 PM</div><div class="what">Guests Welcoming</div></div>
-      <div class="item"><div class="time">7:30 PM</div><div class="what">Dinner &amp; Celebration</div></div>
+      <!-- Icons are simple line drawings (SVG). To change one, replace the <svg> inside that .item -->
+      <div class="item">
+        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 11V4M21 7h6M18 22l6-11 6 11M18 22v22M30 22v22M6 44V32l12-4M42 44V32l-12-4M21 44v-6a3 3 0 0 1 6 0v6M4 44h40"/></svg>
+        <div><div class="time">2:00 PM</div><div class="what">Wedding Ceremony</div></div>
+      </div>
+      <div class="item">
+        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 11h30L24 27zM24 27v13M15 40h18M31 4l-9 14"/><circle cx="22.5" cy="18" r="2"/></svg>
+        <div><div class="time">4:00 PM</div><div class="what">Cocktail Hours</div></div>
+      </div>
+      <div class="item">
+        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 24L24 7l19 17M10 20v24h28V20M20 44V31h8v13"/></svg>
+        <div><div class="time">5:30 PM</div><div class="what">Guests Welcoming</div></div>
+      </div>
+      <div class="item">
+        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="7.5"/><path d="M5 7v11c0 3 6 3 6 0V7M8 7v33M42 7c-4 4-4 12-4 17h4V7zM42 24v16"/></svg>
+        <div><div class="time">7:30 PM</div><div class="what">Dinner &amp; Celebration</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ENTOURAGE =====
+     To edit a name: just change the text inside the <p> tags.
+     "pairs" = 2 columns, each row is a pair (ninang on the left, ninong on the right).
+     On very small phones it becomes 1 column but keeps the same order, so pairs stay together. -->
+<section class="entourage dark navy">
+  <div class="wrap">
+    <p class="eyebrow rv">With love and gratitude</p>
+    <h2 class="rv">The <i>entourage</i></h2>
+
+    <div class="ent-group rv">
+      <h3 class="ent-title">Parents of the Groom</h3>
+      <p>Mr. Linley Julian</p>
+      <p>Mrs. Amelia Julian</p>
+    </div>
+
+    <div class="ent-group rv">
+      <h3 class="ent-title">Parents of the Bride</h3>
+      <p>Mr. Frederick Gimeno</p>
+      <p>Mrs. Josephine Gimeno</p>
+    </div>
+
+    <div class="ent-group rv">
+      <h3 class="ent-title">Principal Sponsors</h3>
+      <div class="ent-grid pairs">
+        <p>Mrs. Mary Grace Perez</p><p>Fr. Carlo Del Rosario</p>
+        <p>Mrs. Elizabeth Mercado</p><p>Mr. Laurel Mercado</p>
+        <p>Mrs. Nenita De Vera</p><p>Mr. Paul Dela Merced</p>
+        <p>Mrs. Michelle Poquiz</p><p>Engr. Ryan Dela Cruz</p>
+        <p>Mrs. Lou Capili</p><p>Engr. Arvin Sanggalang</p>
+        <p>Mrs. Ruby Lu</p><p></p>
+      </div>
+    </div>
+
+    <div class="ent-group rv">
+      <h3 class="ent-title">Secondary Sponsors</h3>
+      <div class="ent-grid two">
+        <div><h4 class="role">Best Man</h4><p>Steven Cornelia</p></div>
+        <div><h4 class="role">Matron of Honor</h4><p>Maricris Del Prado</p></div>
+      </div>
+      <div class="ent-grid three">
+        <div><h4 class="role">Cord</h4><p>Harold Julian</p><p>Bea Rozza Callos</p></div>
+        <div><h4 class="role">Veil</h4><p>Russel Jan Felipe</p><p>Chloe Anne Vizconde</p></div>
+        <div><h4 class="role">Candle</h4><p>Mar Randel Tablada</p><p>Christine Keith Concepcion</p></div>
+      </div>
+      <div class="ent-grid two">
+        <div><h4 class="role">Groomsmen</h4><p>Carl James Julian</p><p>Adrian Jay Gimeno</p><p>Glenn Alfred Gimeno</p></div>
+        <div><h4 class="role">Bridesmaids</h4><p>Rainelle Mitchel Laureles</p><p>Angelie Galamgam</p><p>Riezl Atienza</p></div>
+      </div>
+      <div class="ent-grid four">
+        <div><h4 class="role">Coin Bearer</h4><p>Elvan Encinares</p></div>
+        <div><h4 class="role">Bible Bearer</h4><p>Adiel Liam Encinares</p></div>
+        <div><h4 class="role">Ring Bearer</h4><p>Alison Gabriel Gimeno</p></div>
+        <div><h4 class="role">Flower Girl</h4><p>Anaiah Reese Del Prado</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ATTIRE GUIDE + GIFT GUIDE + ADULTS ONLY ===== -->
+<section class="attire dark burg">
+  <div class="wrap">
+    <p class="eyebrow rv">What to wear</p>
+    <h2 class="rv">Attire <i>guide</i></h2>
+
+    <div class="card rv">
+      <div class="eyebrow">Ninong</div>
+      <p>Barong Tagalog</p>
+      <p>Black Pants</p>
+    </div>
+
+    <div class="card rv">
+      <div class="eyebrow">Ninang</div>
+      <p>Long Gown</p>
+      <!-- Palette circles: change the color code in style="background:#......" to adjust a shade -->
+      <div class="swatches">
+        <span><i style="background:#F4DDB8"></i>Champagne</span>
+        <span><i style="background:#E3D2B4"></i>Beige</span>
+        <span><i style="background:#C3B091"></i>Khaki</span>
+      </div>
+    </div>
+
+    <div class="card rv">
+      <div class="eyebrow">Guests</div>
+      <span class="who">Ladies</span>
+      <p>Long Dress / Jumpsuit</p>
+      <span class="who">Gentlemen</span>
+      <p>Longsleeves / Polo</p>
+      <div class="swatches">
+        <span><i style="background:#0D2C6B"></i>Navy</span>
+        <span><i style="background:#6B1D2A"></i>Burgundy</span>
+      </div>
+    </div>
+
+    <p class="eyebrow notes-title rv">Gentle reminders</p>
+    <div class="notes rv">
+      <div class="card">
+        <div class="eyebrow">Gift Guide</div>
+        <p>Your presence is the greatest gift. If you wish to give more, a monetary gift would be warmly appreciated as we begin our new life together.</p>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Adults Only</div>
+        <p>We love your little ones, but kindly note that our celebration is for adults only. Thank you for understanding.</p>
+      </div>
     </div>
   </div>
 </section>
