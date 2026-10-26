@@ -19,7 +19,7 @@
     --font-display: 'Playfair Display', Georgia, serif;
     --font-label: 'Josefin Sans', Arial, sans-serif;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }  /* no grey flash when tapping on phones */
   html { scroll-behavior: smooth; }
   body {
     margin: 0; color: var(--champagne); font-family: var(--font-display); font-size: 18px;
@@ -69,6 +69,8 @@
     transition: opacity .5s ease;
   }
   .open .start { opacity: 0; }
+  .start { outline: none; user-select: none; -webkit-user-select: none; }
+  .start:focus-visible .mono { box-shadow: 0 0 0 4px var(--gold); }  /* still shows focus for keyboard users */
   .mono {
     position: relative; width: 116px; height: 116px; border-radius: 50%; display: grid; place-items: center;
     border: 2px solid var(--gold); background: radial-gradient(circle, rgba(0,0,0,.35), rgba(0,0,0,.65));
@@ -281,6 +283,13 @@
   // Tap adds class "open" (CSS slides the curtains apart), then page scrolling unlocks.
   var curtain = document.getElementById('curtain');
 
+  // Always begin at the very top (stops the browser from restoring an old scroll position)
+  if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+  window.scrollTo(0, 0);
+  window.addEventListener('pageshow', function () {
+    if (!curtain.classList.contains('open')) { window.scrollTo(0, 0); }
+  });
+
   function startReveal() {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
@@ -293,6 +302,7 @@
 
   document.getElementById('start-btn').addEventListener('click', function () {
     if (curtain.classList.contains('open')) return;
+    window.scrollTo(0, 0);
     curtain.classList.add('open');
     setTimeout(startReveal, 1500);
     setTimeout(function () { document.body.classList.remove('locked'); curtain.style.display = 'none'; }, 3700);
