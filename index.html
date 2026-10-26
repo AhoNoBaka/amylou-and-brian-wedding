@@ -98,6 +98,8 @@
 
   /* ===== 4. COUNTDOWN ===== */
   .count { text-align: center; padding: 70px 0; }
+  .cd-names { font-size: 40px; margin: 0 0 6px; }
+  .cd-sub { margin: 0 0 30px; font-size: 21px; font-style: italic; letter-spacing: .14em; color: #e3cf8f; }
   .timer { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
   .unit { width: 74px; padding: 16px 0 11px; background: var(--paper); border: 1px solid rgba(212,175,55,.6); box-shadow: inset 0 1px 0 #fff, 0 6px 16px rgba(107,29,42,.12); }
   .unit span { display: block; font-size: 32px; line-height: 1.1; color: var(--blue); }
@@ -131,7 +133,7 @@
   .ent-title { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .28em; font-size: 12px; font-weight: 600; color: #e9d27e; margin: 0 0 6px; }
   .ent-group p { margin: 0; font-size: var(--ent-fs); line-height: 1.35; white-space: nowrap; }
   .ent-grid { display: grid; width: 100%; gap: var(--gap) 12px; margin-top: 20px; }
-  .ent-title + .ent-grid { margin-top: 0; }
+  .ent-title + .ent-grid, .ent-group > .ent-grid:first-child { margin-top: 0; }
   .ent-grid.two { grid-template-columns: 1fr 1fr; }
   /* Sponsor pairs: each column is only as wide as its longest name, and the two columns are centered together.
      (Before, 1fr + nowrap let long names push the grid past the right edge.) */
@@ -324,8 +326,8 @@
 
 <section class="count dark burg">
   <div class="wrap">
-    <p class="eyebrow rv">Save the date</p>
-    <h2 class="rv">Counting <i>down</i></h2>
+    <h2 class="rv cd-names">Brian <i>&amp;</i> Amylou</h2>
+    <p class="cd-sub rv">countdown to forever</p>
     <div class="timer rv">
       <div class="unit"><span id="cd-days">--</span><small>Days</small></div>
       <div class="unit"><span id="cd-hours">--</span><small>Hours</small></div>
@@ -365,8 +367,9 @@
         <div><div class="time">4:00 PM</div><div class="what">Cocktail Hours</div></div>
       </div>
       <div class="item">
-        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 24L24 7l19 17M10 20v24h28V20M20 44V31h8v13"/></svg>
-        <div><div class="time">5:30 PM</div><div class="what">Guests Welcoming</div></div>
+        <!-- Program icon: a microphone -->
+        <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="4" width="14" height="24" rx="7"/><path d="M11 22v2a13 13 0 0 0 26 0v-2M24 37v7M15 44h18M17 12h5M17 18h5"/></svg>
+        <div><div class="time">5:30 PM</div><div class="what">Program</div></div>
       </div>
       <div class="item">
         <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="7.5"/><path d="M5 7v11c0 3 6 3 6 0V7M8 7v33M42 7c-4 4-4 12-4 17h4V7zM42 24v16"/></svg>
@@ -384,6 +387,14 @@
   <div class="wrap">
     <p class="eyebrow rv">With love and gratitude</p>
     <h2 class="rv">The <i>entourage</i></h2>
+
+    <!-- Groom and Bride, side by side, above the parents -->
+    <div class="ent-group rv">
+      <div class="ent-grid two">
+        <div><h3 class="ent-title">Groom</h3><p>Brian Julian</p></div>
+        <div><h3 class="ent-title">Bride</h3><p>Amylou Gimeno</p></div>
+      </div>
+    </div>
 
     <div class="ent-group rv">
       <h3 class="ent-title">Parents of the Groom</h3>
