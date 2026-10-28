@@ -113,9 +113,14 @@
   /* ===== SECTION TITLES WITH CURLY DASH =====
      Add class="ttl" to an <h2> and put a .flr svg on each side of the title text (see "The Celebration" below).
      The curl is drawn once in <symbol id="flourish"> and re-used, so editing it there changes ALL titles. */
-  h2.ttl { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: clamp(26px, 8.6vw, 34px); white-space: nowrap; }
-  h2.ttl .flr { flex: 0 1 64px; min-width: 18px; color: #e3cf8f; }
-  .program h2.ttl.script { font-size: clamp(24px, calc((100vw - 150px) / 7.2), 52px); }
+  /* --curl = the SMALLEST a curl is allowed to be (it is never squeezed below this, so it stays easy to see).
+     The title text is sized to leave room for it: font-size = (free width - the two curls) / 7.8.
+     Any space still left over is shared by the two curls, so they stretch longer on wider phones (up to max-width: 80px).
+     Want bigger curls?  Raise --curl (the 12vw and 40px) or the 80px maximum.
+     If a title ever gets cut off on a phone, raise the 7.8 (text gets smaller). */
+  h2.ttl { --curl: clamp(40px, 12vw, 64px); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(20px, calc((100vw - 64px - 2 * var(--curl)) / 7.8), 34px); white-space: nowrap; }
+  h2.ttl .flr { flex: 1 1 var(--curl); min-width: var(--curl); max-width: 80px; color: #e3cf8f; stroke-width: 1.6; opacity: 1; }
+  .program h2.ttl.script { font-size: clamp(22px, calc((100vw - 64px - 2 * var(--curl)) / 8.2), 52px); }
   .timer { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
   .unit { width: 74px; padding: 16px 0 11px; background: var(--paper); border: 1px solid rgba(212,175,55,.6); box-shadow: inset 0 1px 0 #fff, 0 6px 16px rgba(107,29,42,.12); }
   .unit span { display: block; font-size: 32px; line-height: 1.1; color: var(--blue); }
@@ -289,7 +294,7 @@
     <radialGradient id="wax" cx=".35" cy=".28" r=".8"><stop offset="0" stop-color="#f1d98a"/><stop offset=".55" stop-color="#c9a13c"/><stop offset="1" stop-color="#8a6a1a"/></radialGradient>
     <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8902f"/><stop offset=".35" stop-color="#f0dc96"/><stop offset=".6" stop-color="#c9a54a"/><stop offset="1" stop-color="#e9d27e"/></linearGradient>
     <!-- The curly dash used beside every section title (same drawing as the countdown's) -->
-    <symbol id="flourish" viewBox="0 0 64 18"><path d="M62 9H40C34 9 31 5 25 5 17 5 14 11 18 14 22 17 28 13 25 9.5 23.5 8 21 9 21.5 10.5"/><path d="M44 9C45 5 50 3.5 53 4 52 7.5 48.5 9 44 9ZM52 9C53 13 57 14.5 60 14 59 10.5 56 9 52 9Z"/><circle cx="5" cy="9" r="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="flourish" viewBox="0 0 64 18"><path vector-effect="non-scaling-stroke" d="M62 9H40C34 9 31 5 25 5 17 5 14 11 18 14 22 17 28 13 25 9.5 23.5 8 21 9 21.5 10.5"/><path vector-effect="non-scaling-stroke" d="M44 9C45 5 50 3.5 53 4 52 7.5 48.5 9 44 9ZM52 9C53 13 57 14.5 60 14 59 10.5 56 9 52 9Z"/><circle cx="5" cy="9" r="1" fill="currentColor" stroke="none"/></symbol>
     <path id="lf" d="M0 0C6-9 20-9 30 0C20 9 6 9 0 0Z"/>
     <g id="sprig" stroke-linecap="round"><path d="M0 170C8 120 28 70 72 0" fill="none" stroke-width="1.6"/><path d="M22 116C36 118 46 110 52 98M37 86C23 82 15 69 17 57" fill="none" stroke-width="1.1"/>
       <use href="#lf" transform="translate(6 140) rotate(-75) scale(.9)"/><use href="#lf" transform="translate(14 112) rotate(-20)"/><use href="#lf" transform="translate(27 88) rotate(-80)"/><use href="#lf" transform="translate(38 66) rotate(-25) scale(.9)"/><use href="#lf" transform="translate(52 40) rotate(-75) scale(.8)"/><use href="#lf" transform="translate(62 20) rotate(-30) scale(.7)"/><use href="#lf" transform="translate(10 134) rotate(15) scale(.9)"/><use href="#lf" transform="translate(22 100) rotate(42)"/><use href="#lf" transform="translate(34 78) rotate(18)"/><use href="#lf" transform="translate(46 52) rotate(48) scale(.8)"/>
