@@ -110,6 +110,12 @@
   /* little curl + leaves on each side of the line (the right one is a mirror image) */
   .flr { flex: 0 1 80px; min-width: 26px; height: auto; aspect-ratio: 64 / 18; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
   .flr.r { transform: scaleX(-1); }
+  /* ===== SECTION TITLES WITH CURLY DASH =====
+     Add class="ttl" to an <h2> and put a .flr svg on each side of the title text (see "The Celebration" below).
+     The curl is drawn once in <symbol id="flourish"> and re-used, so editing it there changes ALL titles. */
+  h2.ttl { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: clamp(26px, 8.6vw, 34px); white-space: nowrap; }
+  h2.ttl .flr { flex: 0 1 64px; min-width: 18px; color: #e3cf8f; }
+  .program h2.ttl.script { font-size: clamp(24px, calc((100vw - 150px) / 7.2), 52px); }
   .timer { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
   .unit { width: 74px; padding: 16px 0 11px; background: var(--paper); border: 1px solid rgba(212,175,55,.6); box-shadow: inset 0 1px 0 #fff, 0 6px 16px rgba(107,29,42,.12); }
   .unit span { display: block; font-size: 32px; line-height: 1.1; color: var(--blue); }
@@ -164,6 +170,8 @@
   /* ===== 6C. ATTIRE GUIDE + REMINDERS ===== */
   .attire { text-align: center; padding: 70px 0; }
   .attire .card p { font-size: 20px; margin: 6px 0 0; }
+  /* keeps a long line (like "Barong Tagalog & Black Slacks") on ONE line; the text shrinks a little on small phones */
+  .attire .card p.one-line { white-space: nowrap; font-size: clamp(13px, 4.8vw, 20px); }
   .attire .card .who { font-family: var(--font-label); font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--blue); margin-top: 12px; display: block; }
   /* equal-width columns => the circles are always evenly spaced and the group is centered */
   .swatches { display: flex; justify-content: center; margin-top: 18px; }
@@ -201,9 +209,22 @@
 
   /* ===== 7. GALLERY ===== */
   .gallery { text-align: center; padding: 20px 0 60px; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .tile { aspect-ratio: 1; display: grid; place-items: center; border: 1px solid rgba(212,175,55,.6); font-family: var(--font-label); font-size: 11px; letter-spacing: .25em; text-transform: uppercase; font-weight: 600; color: var(--paper); overflow: hidden; box-shadow: 0 6px 16px rgba(107,29,42,.18); }
-  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* ===== GALLERY CAROUSEL (swipe / spin), several rows =====
+     --u = the width of a "1x" photo. A 2x photo is as wide as two 1x photos side by side, a 3x as wide as three.
+     Every photo has the SAME height, so all rows line up evenly. Change --u to make everything bigger/smaller,
+     and the 1.15 in --h to make the photos taller/shorter. */
+  .spin-stack { --u: clamp(90px, 24vw, 160px); --gap: 10px; --h: calc(var(--u) * 1.15); display: flex; flex-direction: column; gap: var(--gap); margin: 6px 0 0; padding-bottom: 14px; }
+  .spin { position: relative; overflow: hidden; padding: 2px 0 8px;
+    cursor: grab; user-select: none; -webkit-user-select: none; touch-action: pan-y;   /* pan-y = up/down still scrolls the page, left/right spins the row */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+  .spin.grabbing { cursor: grabbing; }
+  .spin:focus-visible { outline: 1px solid var(--gold); outline-offset: -4px; }
+  .spin-track { display: flex; gap: var(--gap); width: max-content; will-change: transform; }
+  .tile { flex: none; height: var(--h); display: grid; place-items: center; border: 1px solid rgba(212,175,55,.6); font-family: var(--font-label); font-size: 10px; letter-spacing: .22em; text-transform: uppercase; font-weight: 600; color: var(--paper); overflow: hidden; box-shadow: 0 6px 16px rgba(0,0,0,.28); }
+  .tile img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
+  .w1 { width: var(--u); }
+  .w2 { width: calc(var(--u) * 2 + var(--gap)); }
+  .w3 { width: calc(var(--u) * 3 + var(--gap) * 2); }
   .t1 { background: linear-gradient(135deg, #6B1D2A, #0D2C6B); } .t2 { background: linear-gradient(135deg, #0D2C6B, #56695a); }
   .t3 { background: linear-gradient(135deg, #56695a, #6B1D2A); } .t4 { background: linear-gradient(135deg, #45101a, #071a42); }
   .hashtag { font-size: 30px; font-style: italic; color: var(--blue); margin: 34px 0 6px; }
@@ -267,6 +288,8 @@
     <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16398a"/><stop offset="1" stop-color="#0a2258"/></linearGradient>
     <radialGradient id="wax" cx=".35" cy=".28" r=".8"><stop offset="0" stop-color="#f1d98a"/><stop offset=".55" stop-color="#c9a13c"/><stop offset="1" stop-color="#8a6a1a"/></radialGradient>
     <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8902f"/><stop offset=".35" stop-color="#f0dc96"/><stop offset=".6" stop-color="#c9a54a"/><stop offset="1" stop-color="#e9d27e"/></linearGradient>
+    <!-- The curly dash used beside every section title (same drawing as the countdown's) -->
+    <symbol id="flourish" viewBox="0 0 64 18"><path d="M62 9H40C34 9 31 5 25 5 17 5 14 11 18 14 22 17 28 13 25 9.5 23.5 8 21 9 21.5 10.5"/><path d="M44 9C45 5 50 3.5 53 4 52 7.5 48.5 9 44 9ZM52 9C53 13 57 14.5 60 14 59 10.5 56 9 52 9Z"/><circle cx="5" cy="9" r="1" fill="currentColor" stroke="none"/></symbol>
     <path id="lf" d="M0 0C6-9 20-9 30 0C20 9 6 9 0 0Z"/>
     <g id="sprig" stroke-linecap="round"><path d="M0 170C8 120 28 70 72 0" fill="none" stroke-width="1.6"/><path d="M22 116C36 118 46 110 52 98M37 86C23 82 15 69 17 57" fill="none" stroke-width="1.1"/>
       <use href="#lf" transform="translate(6 140) rotate(-75) scale(.9)"/><use href="#lf" transform="translate(14 112) rotate(-20)"/><use href="#lf" transform="translate(27 88) rotate(-80)"/><use href="#lf" transform="translate(38 66) rotate(-25) scale(.9)"/><use href="#lf" transform="translate(52 40) rotate(-75) scale(.8)"/><use href="#lf" transform="translate(62 20) rotate(-30) scale(.7)"/><use href="#lf" transform="translate(10 134) rotate(15) scale(.9)"/><use href="#lf" transform="translate(22 100) rotate(42)"/><use href="#lf" transform="translate(34 78) rotate(18)"/><use href="#lf" transform="translate(46 52) rotate(48) scale(.8)"/>
@@ -357,7 +380,7 @@
 <section class="details dark navy">
   <div class="wrap">
     <p class="eyebrow rv">Gather with us</p>
-    <h2 class="rv">The <i>Celebration</i></h2>
+    <h2 class="rv ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>The <i>Celebration</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
     <div class="card rv"><div class="eyebrow">Date</div><p>December 15, 2026</p></div>
     <div class="card rv"><div class="eyebrow">Church</div><p>Minor Basilica and Parish of La Purisima Concepcion &ndash; Santa Maria</p>
       <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Minor+Basilica+and+Parish+of+La+Purisima+Concepcion+Santa+Maria+Bulacan" target="_blank" rel="noopener">Go to Church</a>
@@ -372,12 +395,12 @@
 <section class="program dark burg">
   <div class="wrap">
     <p class="eyebrow rv">The day</p>
-    <h2 class="rv script">Wedding <i>Timeline</i></h2>
+    <h2 class="rv script ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>Wedding <i>Timeline</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
     <div class="tl rv">
       <!-- Icons are simple line drawings (SVG). To change one, replace the <svg> inside that .item -->
       <div class="item">
         <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 11V4M21 7h6M18 22l6-11 6 11M18 22v22M30 22v22M6 44V32l12-4M42 44V32l-12-4M21 44v-6a3 3 0 0 1 6 0v6M4 44h40"/></svg>
-        <div><div class="time">2:00 PM</div><div class="what">Wedding Ceremony</div></div>
+        <div><div class="time">1:30 PM</div><div class="what">Wedding Ceremony</div></div>
       </div>
       <div class="item">
         <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 11h30L24 27zM24 27v13M15 40h18M31 4l-9 14"/><circle cx="22.5" cy="18" r="2"/></svg>
@@ -390,7 +413,7 @@
       </div>
       <div class="item">
         <svg class="ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="7.5"/><path d="M5 7v11c0 3 6 3 6 0V7M8 7v33M42 7c-4 4-4 12-4 17h4V7zM42 24v16"/></svg>
-        <div><div class="time">7:30 PM</div><div class="what">Dinner &amp; Celebration</div></div>
+        <div><div class="time">7:00 PM</div><div class="what">Dinner &amp; Celebration</div></div>
       </div>
     </div>
   </div>
@@ -403,7 +426,7 @@
 <section class="entourage dark navy">
   <div class="wrap">
     <p class="eyebrow rv">With love and gratitude</p>
-    <h2 class="rv">The <i>Entourage</i></h2>
+    <h2 class="rv ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>The <i>Entourage</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
 
     <!-- Groom and Bride, side by side, above the parents -->
     <div class="ent-group rv">
@@ -472,16 +495,14 @@
 <section class="attire dark burg">
   <div class="wrap">
     <p class="eyebrow rv">What to wear</p>
-    <h2 class="rv">The <i>Dress Code</i></h2>
+    <h2 class="rv ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>The <i>Dress Code</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
 
+    <!-- Ninong and Ninang now share ONE box, same layout as the Guests box below -->
     <div class="card rv">
-      <div class="eyebrow">Ninong</div>
-      <p>Barong Tagalog</p>
-      <p>Black Slacks</p>
-    </div>
-
-    <div class="card rv">
-      <div class="eyebrow">Ninang</div>
+      <div class="eyebrow">Principal Sponsors</div>
+      <span class="who">Ninong</span>
+      <p class="one-line">Barong Tagalog &amp; Black Slacks</p>
+      <span class="who">Ninang</span>
       <p>Long Gown</p>
       <!-- Palette circles: change the color code in style="background:#......" to adjust a shade -->
       <div class="swatches">
@@ -493,17 +514,17 @@
 
     <div class="card rv">
       <div class="eyebrow">Guests</div>
-      <span class="who">Ladies</span>
-      <p>Long Dress / Jumpsuit</p>
       <span class="who">Gentlemen</span>
       <p>Longsleeves / Polo</p>
+      <span class="who">Ladies</span>
+      <p>Long Dress / Jumpsuit</p>
       <div class="swatches">
         <span><i style="background:#0D2C6B"></i>Navy</span>
         <span><i style="background:#6B1D2A"></i>Burgundy</span>
       </div>
     </div>
 
-    <p class="eyebrow notes-title rv">Gentle reminders</p>
+    <h2 class="rv ttl notes-title"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>Gentle <i>Reminders</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
     <div class="notes rv">
       <div class="card gift">
         <div class="gift-text">
@@ -611,11 +632,56 @@
 <section class="gallery dark navy">
   <div class="wrap">
     <p class="eyebrow rv">Our story so far</p>
-    <h2 class="rv"><i>Gallery</i></h2>
-    <!-- GALLERY: replace a tile with <div class="tile"><img src="photo1.jpg" alt="Brian and Amylou"></div> -->
-    <div class="grid rv">
-      <div class="tile t1">Photo 1</div><div class="tile t2">Photo 2</div><div class="tile t3">Photo 3</div><div class="tile t4">Photo 4</div>
+    <h2 class="rv ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>The <i>Gallery</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
+  </div>
+
+  <!-- GALLERY CAROUSEL (3 layers / rows). Each row loops forever and drifts by itself, each at its own speed and direction.
+       Drag / swipe ONE row to spin just that row: a hard flick spins fast, then it eases down to a calm drift
+       in whatever direction you flung it.
+       HOW TO ADD A PHOTO: copy one tile line and put it inside any row (inside <div class="spin-track">):
+           <div class="tile w2"><img src="static/imgs/your-photo.jpg" alt="Brian and Amylou" loading="lazy"></div>
+       Size classes: w1 = small, w2 = double width, w3 = triple width. All tiles in the page keep the same height.
+       Add as many tiles as you like. The script at the bottom copies them to make the endless loop. -->
+  <div class="spin-stack">
+    <!-- Row 1 -->
+    <div class="spin rv" tabindex="0" role="group" aria-label="Photo gallery row 1. Swipe or drag to spin." data-speed="34" data-dir="1" data-start="0">
+      <div class="spin-track">
+        <div class="tile w2 t1">Photo 1</div>
+        <div class="tile w1 t2">Photo 2</div>
+        <div class="tile w3 t3">Photo 3</div>
+        <div class="tile w1 t4">Photo 4</div>
+        <div class="tile w2 t1">Photo 5</div>
+        <div class="tile w1 t2">Photo 6</div>
+        <div class="tile w1 t3">Photo 7</div>
+      </div>
     </div>
+    <!-- Row 2 -->
+    <div class="spin rv" tabindex="0" role="group" aria-label="Photo gallery row 2. Swipe or drag to spin." data-speed="52" data-dir="-1" data-start="170">
+      <div class="spin-track">
+        <div class="tile w1 t4">Photo 8</div>
+        <div class="tile w3 t1">Photo 9</div>
+        <div class="tile w1 t2">Photo 10</div>
+        <div class="tile w2 t3">Photo 11</div>
+        <div class="tile w1 t4">Photo 12</div>
+        <div class="tile w1 t1">Photo 13</div>
+        <div class="tile w2 t2">Photo 14</div>
+      </div>
+    </div>
+    <!-- Row 3 -->
+    <div class="spin rv" tabindex="0" role="group" aria-label="Photo gallery row 3. Swipe or drag to spin." data-speed="42" data-dir="1" data-start="340">
+      <div class="spin-track">
+        <div class="tile w3 t3">Photo 15</div>
+        <div class="tile w1 t4">Photo 16</div>
+        <div class="tile w1 t1">Photo 17</div>
+        <div class="tile w2 t2">Photo 18</div>
+        <div class="tile w1 t3">Photo 19</div>
+        <div class="tile w2 t4">Photo 20</div>
+        <div class="tile w1 t1">Photo 21</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
     <!-- HASHTAG: change to your real hashtag -->
     <div class="hashtag rv">#BrianAndAmylou</div>
     <p class="small rv">Share your photos with our wedding hashtag</p>
@@ -627,7 +693,7 @@
     <p class="eyebrow rv">Good to know</p>
     <h2 class="rv"><i>FAQs</i></h2>
     <div class="rv">
-      <details><summary>What time does the ceremony start?</summary><p>The wedding ceremony begins at 2:00 PM on December 15, 2026.</p></details>
+      <details><summary>What time does the ceremony start?</summary><p>The wedding ceremony begins at 1:30 PM on December 15, 2026.</p></details>
       <details><summary>Where is the ceremony?</summary><p>Minor Basilica and Parish of La Purisima Concepcion &ndash; Santa Maria. Use the "Go to Church" button above for directions.</p></details>
       <details><summary>Where is the reception?</summary><p>Angel Gabriel's Garden. Use the "Go to Venue" button above for directions.</p></details>
       <details><summary>How do I RSVP?</summary><p>Tap the RSVP button below and fill in the form.</p></details>
@@ -780,8 +846,8 @@
   else { rsvp.removeAttribute('href'); rsvp.setAttribute('aria-disabled', 'true'); rsvp.textContent = 'RSVP opens soon'; }
 
   // ===== COUNTDOWN =====
-  // Target: December 15, 2026, 2:00 PM (month is 0-based, so 11 = December)
-  var target = new Date(2026, 11, 15, 14, 0, 0);
+  // Target: December 15, 2026, 1:30 PM (month is 0-based, so 11 = December; 13 = 1 PM in 24-hour time, 30 = minutes)
+  var target = new Date(2026, 11, 15, 13, 30, 0);
   function pad(n) { return n < 10 ? '0' + n : String(n); }
   function tick() {
     var diff = target - new Date(); if (diff <= 0) { diff = 0; }
@@ -792,6 +858,84 @@
     document.getElementById('cd-secs').textContent = pad(s % 60);
   }
   tick(); setInterval(tick, 1000);
+
+  // ===== GALLERY CAROUSEL (several rows, endless loop, swipe to spin like a roulette) =====
+  // How it works, step by step (every row does this on its own):
+  //  1. The tiles are copied a few times so the row never runs out (the endless loop).
+  //  2. Every frame we slide the row by "vel" pixels per second. When we have slid one full set of tiles, we jump back to 0
+  //     (looks identical, so nobody sees the jump).
+  //  3. Dragging moves the row with your finger/mouse. When you let go, "vel" becomes the speed of your flick,
+  //     so a hard flick spins fast and a flick the other way reverses the direction.
+  //  4. After that, "vel" slowly eases back down to a calm drift (CRUISE) in the direction of the last flick.
+  // Each row can set its own drift in the HTML:  data-speed="40" (pixels per second), data-dir="1" or "-1", data-start="170" (where it starts).
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setupSpinner(view) {
+    var track = view.querySelector('.spin-track');
+    var originals = Array.prototype.slice.call(track.children);
+    var CRUISE = reduceMotion ? 0 : (parseFloat(view.dataset.speed) || 38);   // calm drift speed (pixels per second)
+    var EASE = 1.1;                    // seconds it takes to settle back to the drift. Bigger = longer, more "roulette" spin.
+    var offset = parseFloat(view.dataset.start) || 0, dir = (parseFloat(view.dataset.dir) < 0) ? -1 : 1, vel = CRUISE * dir, loopW = 1;
+    var dragging = false, lastX = 0, lastT = 0, dragVel = 0, onScreen = true;
+
+    function build() {
+      Array.prototype.slice.call(track.querySelectorAll('[data-clone]')).forEach(function (n) { track.removeChild(n); });
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 10;
+      loopW = track.scrollWidth + gap;                              // width of ONE full set of tiles
+      var copies = Math.ceil(view.clientWidth / loopW) + 1;         // enough sets to always fill the screen
+      for (var c = 0; c < copies; c++) {
+        originals.forEach(function (t) {
+          var k = t.cloneNode(true); k.setAttribute('data-clone', ''); k.setAttribute('aria-hidden', 'true'); track.appendChild(k);
+        });
+      }
+    }
+    function wrap() { offset = ((offset % loopW) + loopW) % loopW; }
+    function render() { track.style.transform = 'translate3d(' + (-offset) + 'px,0,0)'; }
+
+    var prev = performance.now();
+    function frame(now) {
+      var dt = Math.min((now - prev) / 1000, 0.05); prev = now;
+      if (!dragging && onScreen) {
+        vel += (CRUISE * dir - vel) * (1 - Math.exp(-dt / EASE));   // ease the speed back to the calm drift
+        offset += vel * dt; wrap(); render();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    view.addEventListener('pointerdown', function (e) {
+      dragging = true; lastX = e.clientX; lastT = performance.now(); dragVel = 0;
+      view.classList.add('grabbing'); try { view.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    view.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var now = performance.now(), dx = e.clientX - lastX, secs = Math.max(now - lastT, 1) / 1000;
+      offset -= dx; wrap(); render();
+      dragVel = dragVel * 0.6 + (-dx / secs) * 0.4;                 // smoothed finger speed
+      lastX = e.clientX; lastT = now;
+    });
+    function release() {
+      if (!dragging) return;
+      dragging = false; view.classList.remove('grabbing');
+      if (performance.now() - lastT > 100) dragVel = 0;             // finger rested before letting go = no flick
+      vel = Math.max(-3500, Math.min(3500, dragVel));
+      if (Math.abs(vel) > 90) dir = vel > 0 ? 1 : -1;               // flung the other way = the row now drifts that way
+    }
+    view.addEventListener('pointerup', release); view.addEventListener('pointercancel', release);
+
+    // keyboard: left / right arrow gives the focused row a spin too
+    view.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { dir = 1; vel = 700; } else if (e.key === 'ArrowLeft') { dir = -1; vel = -700; }
+    });
+
+    // only animate while the row is on screen (saves battery)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; prev = performance.now(); }).observe(view);
+    }
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { build(); wrap(); render(); }, 150); });
+
+    build(); render(); requestAnimationFrame(frame);
+    view.__state = function () { return { offset: offset, vel: vel, dir: dir }; };   // only used for testing
+  }
+  document.querySelectorAll('.spin').forEach(setupSpinner);
 </script>
 </body>
 </html>
