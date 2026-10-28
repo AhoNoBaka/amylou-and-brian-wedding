@@ -105,7 +105,10 @@
   .cd-names { font-size: clamp(38px, calc((100vw - 56px) / 6.1), 58px); line-height: 1.1; margin: 0 0 8px; white-space: nowrap; }
   .cd-names i { margin: 0 .12em; }
   .program h2.script { font-size: clamp(34px, calc((100vw - 48px) / 6.2), 52px); line-height: 1.1; white-space: nowrap; }
-  .cd-sub { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 0 30px; font-size: clamp(15px, 5vw, 21px); font-style: italic; letter-spacing: .14em; color: #e3cf8f; }
+  /* same idea as the section titles: --curl is the SMALLEST a curl can be; the text is sized to leave room for it
+     (free width - two curls) / 12.6, and the curls stretch into any space left over (max 90px). Raise the 12.6 if the text ever gets cut off. */
+  .cd-sub { --curl: clamp(48px, 15vw, 72px); display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 0 30px; font-size: clamp(12px, calc((100vw - 48px - 2 * var(--curl) - 20px) / 12.6), 21px); font-style: italic; letter-spacing: .14em; color: #e3cf8f; }
+  .cd-sub .flr { flex: 1 1 var(--curl); min-width: var(--curl); max-width: 90px; stroke-width: 1.6; opacity: 1; }
   .cd-sub span { white-space: nowrap; }
   /* little curl + leaves on each side of the line (the right one is a mirror image) */
   .flr { flex: 0 1 80px; min-width: 26px; height: auto; aspect-ratio: 64 / 18; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
@@ -372,7 +375,7 @@
 <section class="count dark burg">
   <div class="wrap">
     <h2 class="rv script cd-names">Brian <i>&amp;</i> Amylou</h2>
-    <p class="cd-sub rv"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><path d="M62 9H40C34 9 31 5 25 5 17 5 14 11 18 14 22 17 28 13 25 9.5 23.5 8 21 9 21.5 10.5"/><path d="M44 9C45 5 50 3.5 53 4 52 7.5 48.5 9 44 9ZM52 9C53 13 57 14.5 60 14 59 10.5 56 9 52 9Z"/><circle cx="5" cy="9" r="1" fill="currentColor" stroke="none"/></svg><span>countdown to forever</span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><path d="M62 9H40C34 9 31 5 25 5 17 5 14 11 18 14 22 17 28 13 25 9.5 23.5 8 21 9 21.5 10.5"/><path d="M44 9C45 5 50 3.5 53 4 52 7.5 48.5 9 44 9ZM52 9C53 13 57 14.5 60 14 59 10.5 56 9 52 9Z"/><circle cx="5" cy="9" r="1" fill="currentColor" stroke="none"/></svg></p>
+    <p class="cd-sub rv"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>countdown to forever</span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></p>
     <div class="timer rv">
       <div class="unit"><span id="cd-days">--</span><small>Days</small></div>
       <div class="unit"><span id="cd-hours">--</span><small>Hours</small></div>
@@ -696,7 +699,7 @@
 <section class="faq dark burg">
   <div class="wrap">
     <p class="eyebrow rv">Good to know</p>
-    <h2 class="rv"><i>FAQs</i></h2>
+    <h2 class="rv ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span><i>FAQs</i></span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
     <div class="rv">
       <details><summary>What time does the ceremony start?</summary><p>The wedding ceremony begins at 1:30 PM on December 15, 2026.</p></details>
       <details><summary>Where is the ceremony?</summary><p>Minor Basilica and Parish of La Purisima Concepcion &ndash; Santa Maria. Use the "Go to Church" button above for directions.</p></details>
@@ -711,7 +714,7 @@
 <section class="rsvp dark navy">
   <div class="wrap">
     <p class="eyebrow rv">Will you join us?</p>
-    <h2 class="rv">RSVP</h2>
+    <h2 class="rv ttl"><svg class="flr" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg><span>RSVP</span><svg class="flr r" viewBox="0 0 64 18" aria-hidden="true"><use href="#flourish"/></svg></h2>
     <p class="lead rv">Kindly let us know if you can make it to the celebration.</p>
     <a class="btn-gold rv" id="rsvp-btn" href="#" target="_blank" rel="noopener">RSVP now</a>
   </div>
