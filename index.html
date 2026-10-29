@@ -267,8 +267,27 @@
   /* alternating navy / burgundy sections */
   .dark { position: relative; overflow: hidden; color: var(--champagne); border-top: 1px solid rgba(212,175,55,.35); }
   .hero.dark { border-top: 0; }
-  .navy { background: linear-gradient(#0D2C6B, #0a2257); }
-  .burg { background: linear-gradient(#6B1D2A, #55131f); }
+  /* base colours = the average colour of each damask tile, so the soft edge fade below blends in invisibly */
+  .navy { background: #0E2457; --damask: url('static/imgs/damask-navy.jpg'); }
+  .burg { background: #4F0B1F; --damask: url('static/imgs/damask-burgundy.jpg'); }
+
+  /* ===== DAMASK TEXTURE (behind every navy / burgundy section) =====
+     static/imgs/damask-burgundy.jpg and damask-navy.jpg are SEAMLESS tiles (430 x 564 px), so they repeat forever.
+     Size is fluid:  --dm = on-screen width of ONE tile (height follows, tile ratio is 430:564).
+       clamp(smallest, % of screen width, biggest)  ->  ~195px on a phone, 300px max on big screens.
+     Bigger motifs: raise the numbers.  Finer motifs: lower them.  Fainter overall: lower .dark::before opacity.
+     The top/bottom ~36px fade out (mask) so the pattern never looks chopped off where a section starts or ends. */
+  .dark { isolation: isolate; --dm: clamp(170px, 48vw, 300px); }
+  .dark::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background-image: var(--damask);
+    background-repeat: repeat;
+    background-size: var(--dm) calc(var(--dm) * 564 / 430);
+    background-position: 50% 0;                                            /* centred, so it looks balanced on any width */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 36px, #000 calc(100% - 36px), transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0, #000 36px, #000 calc(100% - 36px), transparent 100%);
+  }
+  .hero.dark::before { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent 100%); mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent 100%); }   /* first section: only fade the bottom */
   .dark .eyebrow { color: #e3cf8f; }
   .dark h2 i, .dark .hl, .dark .names .amp, .dark .date-big, .dark .tl .time, .dark .hashtag, .dark .sign, .dark summary::after { color: #e9d27e; }
   .dark .lead, .dark details p { color: #eadfca; }
